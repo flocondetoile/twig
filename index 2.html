@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Les profils d'installation</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+    <link rel="stylesheet" href="css/custom.css">
+
+		<!-- For syntax highlighting -->
+		<!--<link rel="stylesheet" href="lib/css/zenburn.css">-->
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+          <h3>Le theming avec Drupal 8</h3>
+          <h2>A la découverte de</h2>
+					<h1>Twig</h1>
+				</section>
+
+				<!--<section data-transition="cube">-->
+					<!--<h2>Présentation</h2>-->
+          <!--<p>Fabrice Scoyer</p>-->
+          <!--<p>Freelance Drupal - <span class="blue">Flocon de toile</span> <br/>-->
+            <!--<img style="vertical-align: middle;" class="brut" width="150px" src="images/logo_flocon.png" alt="Logo Flocon de toile">-->
+          <!--</p>-->
+				<!--</section>-->
+
+        <section class="center">
+          <h2 class="center">Twig</h2>
+          <img style="vertical-align: middle; max-height: 200px;" class="brut center" src="images/twig-logo.png" alt="Twig logo">
+          <ul>
+            <li>Nouveau moteur de template de Drupal 8</li>
+            <li>Projet indépendant, utilisé par ailleurs</li>
+            <li>Documentation : <a href="http://twig.sensiolabs.org/documentation">http://twig.sensiolabs.org/documentation</a></li>
+          </ul>
+        </section>
+
+        <section>
+          <section class="center">
+            <h2 class="center">Twig VS PHPTemplate</h2>
+            <ul>
+              <li>Syntaxe propre plus concise pour manipuler/parcourir des variables</li>
+              <li>Twig est sécurisé par défaut sur Drupal 8 (auto échappement)</li>
+              <li>Twig est extensible : filtres</li>
+              <li>Héritage / inclusion de templates permettant de limiter la duplication de code</li>
+            </ul>
+          </section>
+          <section class="center" data-background-image="images/phptemplate.png" data-background-transition="cube">
+            <h2 class="center">Syntaxe propre plus concise pour manipuler/parcourir des variables</h2>
+            <img style="vertical-align: middle; max-width: 100%;" class="brut center" src="images/twig.png" alt="Twig vs phptemplate">
+          </section>
+        </section>
+
+        <section>
+          <section class="center">
+            <h2 class="center">Débuter avec Twig</h2>
+            <ul>
+              <li>Activer le debug de Twig : services.yml</li>
+              <li>Les fonctions de debug : dump(var)</li>
+              <li>Un peu mieux avec Kink : kint(var)</li>
+              <li>Ou encore xdebug : <a hef="https://www.drupal.org/sandbox/charginghawk/2697135">Twig xdebug</a></li>
+            </ul>
+          </section>
+          <section class="center">
+            <h2 class="center">Activer le debug de Twig : services.yml</h2>
+            <pre>
+              <code class="yaml">
+  parameters:
+    twig.config:
+      debug: true
+      auto_reload: true
+      cache: false
+              </code>
+            </pre>
+            <img style="vertical-align: middle; max-width: 100%;" class="brut center" src="images/debug_actif.png" alt="debug twig actif">
+            <p>Une extension chrome : <a href="https://github.com/arshad/drupal-template-helper?utm_content=buffer30f2f&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer">Drupal template Helper</a></p>
+          </section>
+          <section class="center">
+            <h2 class="center">{{ dump(content) }} : peut mieux faire</h2>
+            <img style="vertical-align: middle; max-width: 100%;" class="brut center" src="images/dump.png" alt="debug avec dump()">
+          </section>
+          <section class="center">
+            <h2 class="center">{{ kint(content) }} : mieux mais très looooooonnnnnng</h2>
+            <img style="vertical-align: middle; max-height: 100%;" class="brut center" src="images/kint.png" alt="debug avec kint()">
+          </section>
+          <section class="center">
+            <h2 class="center">{{ breakpoints() }} : top !</h2>
+            <img style="vertical-align: middle; max-width: 100%;" class="brut center" src="images/twig_xdebug.png" alt="debug avec xdebug()">
+          </section>
+        </section>
+
+        <section class="center">
+          <h2 class="center">Les surcharges de templates</h2>
+          <p>avec </p>
+          <pre>
+            <code class="php">
+function MODULE_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+    $suggestions[] = 'page__flocon__' . $node->getType();
+    $suggestions[] = 'page__flocon__node_' . $node->id();
+  }
+}
+            </code>
+          </pre>
+          <ul>
+            <li>Première configuration de base lors de l'installation</li>
+            <li>Eviter de devoir refaire le même type de configuration, encore et encore</li>
+            <li>Générer un site web prêt à l'emploi</li>
+            <li>Mettre en place une usine à site</li>
+          </ul>
+        </section>
+
+        <section class="center">
+          <h2 class="center">Twig et la sécurité</h2>
+
+
+          https://www.drupal.org/node/2296163
+          https://www.drupal.org/node/2311123
+
+
+          <ul>
+            <li>Première configuration de base lors de l'installation</li>
+            <li>Eviter de devoir refaire le même type de configuration, encore et encore</li>
+            <li>Générer un site web prêt à l'emploi</li>
+            <li>Mettre en place une usine à site</li>
+          </ul>
+        </section>
+
+        <section class="center">
+          <h2 class="center">Un peu de syntaxe</h2>
+          <ul>
+            <li>Première configuration de base lors de l'installation</li>
+            <li>Eviter de devoir refaire le même type de configuration, encore et encore</li>
+            <li>Générer un site web prêt à l'emploi</li>
+            <li>Mettre en place une usine à site</li>
+          </ul>
+        </section>
+
+        <section class="center">
+          <h2 class="center">Les surcharges</h2>
+          <ul>
+            <li>Première configuration de base lors de l'installation</li>
+            <li>Eviter de devoir refaire le même type de configuration, encore et encore</li>
+            <li>Générer un site web prêt à l'emploi</li>
+            <li>Mettre en place une usine à site</li>
+          </ul>
+        </section>
+
+        <section class="center">
+          <h2 class="center">Extension et inclusion</h2>
+          <ul>
+            <li>Première configuration de base lors de l'installation</li>
+            <li>Eviter de devoir refaire le même type de configuration, encore et encore</li>
+            <li>Générer un site web prêt à l'emploi</li>
+            <li>Mettre en place une usine à site</li>
+          </ul>
+        </section>
+
+        <section class="center">
+          <h2 class="center">La manipulation des variables</h2>
+          <ul>
+            <li>Première configuration de base lors de l'installation</li>
+            <li>Eviter de devoir refaire le même type de configuration, encore et encore</li>
+            <li>Générer un site web prêt à l'emploi</li>
+            <li>Mettre en place une usine à site</li>
+          </ul>
+        </section>
+
+
+        <section class="center">
+          <h2 class="center">Fournir ses propres variables</h2>
+          <ul>
+            <li>Première configuration de base lors de l'installation</li>
+            <li>Eviter de devoir refaire le même type de configuration, encore et encore</li>
+            <li>Générer un site web prêt à l'emploi</li>
+            <li>Mettre en place une usine à site</li>
+          </ul>
+        </section>
+
+        <section class="center">
+          <h2 class="center">Le multilinguisme</h2>
+          <ul>
+            <li>Première configuration de base lors de l'installation</li>
+            <li>Eviter de devoir refaire le même type de configuration, encore et encore</li>
+            <li>Générer un site web prêt à l'emploi</li>
+            <li>Mettre en place une usine à site</li>
+          </ul>
+        </section>
+
+
+        <section class="center">
+          <h2 class="center">Créer ses propres filtres</h2>
+          <ul>
+            <li>Première configuration de base lors de l'installation</li>
+            <li>Eviter de devoir refaire le même type de configuration, encore et encore</li>
+            <li>Générer un site web prêt à l'emploi</li>
+            <li>Mettre en place une usine à site</li>
+          </ul>
+        </section>
+
+        <section class="center">
+          <h2 class="center">Les bonnes pratiques</h2>
+          <ul>
+            <li>Toujours envoyer aux templates des <em>render array</em></li>
+            <li>Attention au filtre raw</li>
+            <li>Ne pas hésiter à créer ses classes au sein du template</li>
+          </ul>
+        </section>
+
+
+
+
+        <section class="justify">
+          <h2 class="center">Un profil d'installation ?</h2>
+          <img style="vertical-align: middle; max-width: 100%;" class="brut center" src="images/choix_profil.png" alt="Choix profil installation">
+        </section>
+
+        <section class="center">
+          <h2 class="center">Pourquoi faire ?</h2>
+          <ul>
+              <li>Première configuration de base lors de l'installation</li>
+              <li>Eviter de devoir refaire le même type de configuration, encore et encore</li>
+              <li>Générer un site web prêt à l'emploi</li>
+              <li>Mettre en place une usine à site</li>
+          </ul>
+        </section>
+
+        <section class="justify">
+          <h2 class="center">Les Distributions</h2>
+          <p class="margin-bottom">ne sont ni plus ni moins que des profils d'intallation concus pour fournir un ensemble de fonctionnalités orientées vers un objectif précis et commun</p>
+          <blockquote>Mais pourquoi alors ne pas utiliser une de ces distributions déjà disponible ?</blockquote>
+        </section>
+
+        <section data-transition="linear" data-background="#4d7e65" data-background-transition="slide">
+          <h2>Le choix d'une distribution</h2>
+          <p>doit être fait avec une très grande précaution</p>
+          <ul>
+            <li>Utilisation dans sa configuration exacte (ou presque)</li>
+            <li>Dépendance vis à vis de la distribution pour MAJ</li>
+            <li>Qualité du code / Configuration / Générique</li>
+            <li>L'appropriation d'une distribution peut être très chronophage</li>
+          </ul>
+          <br /><br />
+          <p>Sinon on se retrouve très vite à construire un site en devant se battre <strong>CONTRE</strong> Drupal et non plus AVEC</p>
+        </section>
+
+        <section data-transition="linear" data-background="#7e3443" data-background-transition="slide">
+          <h1>Eviter</h1>
+          <h2>Les distributions Potemkine*</h2>
+          <br /><br />
+          <p class="right small">* en référence à l'expression <i>Villages Potemkine</i></p>
+        </section>
+
+        <section data-transition="linear" data-background-image="images/porto_theme.png" data-background-transition="slide">
+          <blockquote style="background: rgba(0,0,0,0.5);">Oooohhhhh, c'est beau !</blockquote>
+        </section>
+
+
+        <section data-transition="linear" data-background-image="images/code_bloc_template.jpg" data-background-transition="slide">
+          <blockquote style="background: rgba(0,0,0,0.5);">Aaarrrrggghhhhhhhhhh</blockquote>
+        </section>
+
+				<section>
+          <h2>Avantages d'un profil d'installation</h2>
+          <p>selon une approche générique et modulaire</p>
+
+          <ul>
+            <li>Gain de temps</li>
+            <li>Reproductibilité</li>
+            <li>Consistance</li>
+            <li>Amélioration continue</li>
+            <li>Capitalisation</li>
+          </ul>
+				</section>
+
+        <section>
+          <h2>Créer son profil d'installation</h2>
+          <p>[nom_profile].info.yml</p>
+          <pre>
+            <code class="yml">
+  name: Usine
+  type: profile
+  description: Génération site web.
+  core: 8.x
+
+  dependencies:
+  # Core modules
+  - node
+  # Contrib modules
+  - token
+  # Custom modules
+  - uas_taxonomy
+  themes:
+  - uas_base
+  - bootstrap
+  - seven
+            </code>
+          </pre>
+
+        </section>
+
+        <section>
+          <h2>Ajout de dépendances optionnelles</h2>
+          <p>[nom_profile].info.yml</p>
+          <pre><code>
+  configurable_module:
+    uas_actualite:
+      label: Actualités
+      description: Fournit des contenus pour publier des actualités, avec commentaires.
+      enabled: true
+    uas_publication:
+      label: Publications
+      description: Fournit des contenus pour publier des publications.
+      enabled: true
+    uas_slider:
+      label: Diaporama page accueil
+      description: Fournit un bloc de contenu pour créer des diaporamas.
+    enabled: true
+          </code></pre>
+        </section>
+
+        <section>
+          <h2>Personnalisation des étapes</h2>
+          <p>[nom_profile].profile</p>
+            <pre><code class="php">
+  /**
+  * Implements hook_install_tasks().
+  */
+  function [nom_profil]_install_tasks(&$install_state) {
+    return [
+      'configurable_profile_dependencies' => [
+        'display_name' => t('Features'),
+        'display' => TRUE,
+        'type' => 'form',
+        'function' => 'Drupal\uas\Form\ConfigurableProfileDependenciesForm',
+      ],
+      'webmestre_account' => [
+        'display_name' => t('Webmestre Account'),
+        'display' => TRUE,
+        'type' => 'form',
+        'function' => 'Drupal\uas\Form\WebmestreAccountForm',
+      ],
+    ];
+  }
+            </code></pre>
+
+        </section>
+
+        <section>
+          <h2>Personnalisation du profil</h2>
+          <div style="font-size: 0.7em !important;">
+            <pre><code>
+  <span class="blue">[nom_profil].install</span> #pour effectuer certaines taches lors de l'installation initiale de votre profil
+  <span class="blue">[nom_profil].services.yml</span> #pour déclarer des services
+  <span class="blue">[nom_profil].routing.yml</span> #pour déclarer des routes spécifiques
+  <span class="blue">[nom_profil].librairies.yml</span> #pour déclarer des librairies à charger
+  <span class="blue">[nom_profil].permissions.yml</span> #pour déclarer des permissions spécifiques
+  <span class="blue">etc. etc.</span> #bref, tout fichier de configuration que l'on peut retrouver dans un module Drupal 8 classique
+            </code></pre>
+          </div>
+          <p>Mais il vaut mieux déporter toute fonctionnalité supplémentaire dans un module.
+            Gardez le profil d'installation aussi simple que possible, uniquement pour altérer / compléter le processus initial</p>
+        </section>
+
+        <section>
+          <h2>Configuration initiale du site</h2>
+          <p>2 méthodes à disposition</p>
+            <ul>
+                <li>via les fichiers de configuration placés sous le répertoire config/install ou config/optionnal</li>
+                <li>via l'implémentation de hook_install()</li>
+            </ul>
+          <p>&nbsp;</p>
+          <p class="justify">Config/install : configuration déployée à l'installation du module</p>
+          <p class="justify">Config/optional : configuration dépendante de modules tiers, déployée lors de leurs installations</p>
+        </section>
+
+
+        <section>
+            <h2>Configuration via fichier YAML</h2>
+            <pre><code class="yaml">
+              #File system.theme.yml
+              admin: seven
+              default: uas_base
+              langcode: en
+            </code></pre>
+          <ul class="justify">
+            <li>Automatisation export des configurations avec Configuration Development (UI / Drush)</li>
+            <li>Redonner aux modules le pouvoir sur la configuration</li>
+          </ul>
+        </section>
+
+        <section>
+            <h2>Configuration via hook_install()</h2>
+          <pre><code class="php">
+  function [mon_profil]_install() {
+    $uas->createMenuLink($node->title, 'entity:node/'.$node->id(),
+    2, 'footer');
+  }
+          </code></pre>
+            <ul>
+              <li>Quand la configuration peut être aussi assimilé à du contenu (menu, block)</li>
+              <li>Pour fournir une configuration dynamique</li>
+              <li>Pour générer du contenu par défaut pour faciliter l'appropriation du site</li>
+              <li>Pour ne PAS donner aux modules le pouvoir sur la configuration</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Création de packages fonctionnels</h2>
+            <h3>les plus génériques possibles</h3>
+            <ul>
+              <li>Styles d'image adaptatif </li>
+              <li>Types de paragraphs</li>
+              <li>Multilinguisme</li>
+              <li>Permissions et Role</li>
+              <li>Types de contenu</li>
+              <li>Profil utilisateur</li>
+              <li>etc.</li>
+            </ul>
+        </section>
+
+        <section>
+
+          <section>
+              <h2>Exemple : les styles d'images</h2>
+            <img style="vertical-align: middle; max-width: 100%;" class="brut center" src="images/style_image.png" alt="Création style d'images">
+          </section>
+
+          <section>
+            <h2>Création des styles adaptatifs</h2>
+            <img style="vertical-align: middle; max-height: 600px;" class="brut center" src="images/style_uas_full_content.png" alt="Création style d'images">
+          </section>
+
+          <section>
+            <h2>Liste des configurations créées</h2>
+            <pre><code class="bash">
+  [flocon@detoile /srv/www/uas]drush config-list | grep image.style
+  image.style.uas_large
+  image.style.uas_medium
+  image.style.uas_mobile
+  image.style.uas_narrow
+  image.style.uas_normal
+  image.style.uas_thumbnail
+  image.style.uas_wide_large
+  image.style.uas_wide_medium
+  image.style.uas_wide_mobile
+  image.style.uas_wide_narrow
+  image.style.uas_wide_normal
+  image.style.uas_wide_thumbnail
+  responsive_image.styles.uas_full_content
+  responsive_image.styles.uas_full_screen
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>Création du module</h2>
+            <pre><code class="yaml" style="max-height: 500px;">
+  name: 'Uas Image'
+  description: 'Provide image styles and responsive settings'
+  type: module
+  core: 8.x
+  package: Uas
+  dependencies:
+  - responsive_image
+  - image
+  config_devel:
+  - image.style.uas_large
+  - image.style.uas_medium
+  - image.style.uas_mobile
+  - image.style.uas_narrow
+  - image.style.uas_normal
+  - image.style.uas_thumbnail
+  - image.style.uas_wide_large
+  - image.style.uas_wide_medium
+  - image.style.uas_wide_mobile
+  - image.style.uas_wide_narrow
+  - image.style.uas_wide_normal
+  - image.style.uas_wide_thumbnail
+  - responsive_image.styles.uas_full_content
+  - responsive_image.styles.uas_full_screen
+            </code></pre>
+          </section>
+
+          <section>
+            <h2>Export de la configuration</h2>
+            <pre><code class="bash">
+  [flocon@detoile /srv/www/uas]drush cd-em uas_image
+            </code></pre>
+            <img style="vertical-align: middle; max-height: 500px;" class="brut center" src="images/configuration_export.png" alt="Configuration exportée">
+
+          </section>
+
+        </section>
+
+        <section>
+            <h2>Maintenance des configurations</h2>
+            <ul>
+                <li>Configuration indépendante du module : on peut déinstaller et supprimer le module</li>
+                <li>Configuration dépendante du module : les configurations sont supprimées si le module est désinstallé</li>
+            </ul>
+           <pre><code class="yaml">
+  dependencies:
+    enforced:
+      modules:
+        - uas_image
+           </code></pre>
+        </section>
+
+        <section data-transition="linear" data-background="#4d7e65" data-background-transition="slide">
+            <h2>Cas d'usage des profils d'installation</h2>
+            <h3>Une usine à site</h3>
+        </section>
+
+        <section>
+            <h2>Générer un type de site</h2>
+            <ul>
+              <li>Site événementiel</li>
+              <li>Site One page</li>
+              <li>Site de publication</li>
+              <li>Site collaboratif</li>
+              <li>etc.</li>
+            </ul>
+        </section>
+
+        <section>
+          <h2>Types de packages</h2>
+          <ul>
+            <li>Packages de bas niveau : réutilisables sur tout type de site (style d'images, types de paragraphs, format de texte, slider - tout le monde veut un diaporama ! - etc.)</li>
+            <li>Packages fonctionnels : orienté vers un objectif (groupe collaboratif, événementiel, One page, etc)</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Industrialiser <br />le sur-mesure</h2>
+          <img style="vertical-align: middle; max-height: 500px;" class="brut center" src="images/choix_type_site.png" alt="Configuration exportée">
+        </section>
+
+        <section data-transition="linear" data-background="#4D6E7E" data-background-transition="slide">
+          <h2>La maintenance des sites</h2>
+        </section>
+
+        <section>
+          <h2>Redonner le pouvoir aux modules sur leurs configurations</h2>
+          <p>Avec le module <a href="https://www.drupal.org/project/config_sync" target="_blank">Configuration Synchronizer</a></p>
+          <p>Issue #2445463 pour le support de Drush</p>
+          <p>Permet de synchroniser la configuration d'un site depuis la configuration des modules</p>
+        </section>
+
+        <section>
+          <h2>Lister le statut des configurations</h2>
+          <img style="vertical-align: middle; max-height: 500px;" class="brut center" src="images/drush_cs_list.gif" alt="drush cs-list demo">
+        </section>
+
+        <section>
+          <h2>Modifier une configuration</h2>
+          <img style="vertical-align: middle; max-height: 500px;" class="brut center" src="images/modif_configuration.gif" alt="drush cs-list demo">
+        </section>
+
+        <section>
+          <h2>Mette à jour en masse la configuration de chaque site</h2>
+          <img style="vertical-align: middle; max-height: 500px;" class="brut center" src="images/drush_cs_update.gif" alt="drush cs-update demo">
+        </section>
+
+        <section data-transition="linear" data-background-image="images/nos_publications.png" data-background-transition="slide">
+        </section>
+
+        <section>
+          <h2>Configuration synchronizer</h2>
+          <ul>
+            <li>Permet de maintenir en toute sécurité la configuration d'un site depuis les fichiers YAML</li>
+            <li>En toute sécurité car, par défaut, une configuration modifiée sur le site n'est pas écrasée</li>
+          </ul>
+          <pre><code class="bash">
+            drush cs-update --unsafe
+          </code></pre>
+          <ul>
+            <li>A venir : la possibilité d'effectuer des fusions sur une même configuration modifiée
+              sur le site et également au niveau des fichiers YAML</li>
+          </ul>
+        </section>
+
+
+        <section>
+          <h2>Les principaux modules liés à la configuration</h2>
+          <ul>
+            <li>Configuration share : pour partager des configurations entre packages (field.storage par exemple)</li>
+            <li>Configuration Update Manager : module de bas niveau</li>
+            <li>Configuration development : import et export (automatisable) depuis/vers des modules</li>
+            <li>Configuration synchronization : synchronisation de configurations depuis des modules</li>
+            <li>Configuration read-only mode : empêcher toute modification de configuration depuis l'interface d'un site</li>
+            <li>Configuration Installer : installer un nouveau site depuis un export complet de la configuration</li>
+          </ul>
+        </section>
+
+        <section data-transition="linear" data-background="#4D6E7E" data-background-transition="slide">
+          <h2>Et Features ?</h2>
+        </section>
+
+        <section data-transition="linear" data-background-transition="slide">
+          <img style="vertical-align: middle; max-height: 500px;" class="brut center" src="images/features.png" alt="Features UI">
+        </section>
+
+        <section>
+          <h2>Features</h2>
+          <ul>
+            <li>Une interface graphique pour packager des fonctionnalités</li>
+            <li>Pour les manager (attention aux faux positifs ou aux ajouts automatiques)</li>
+            <li>Commandes drush pour exporter, importer et visualiser les différences</li>
+          </ul>
+        </section>
+
+        <section data-transition="linear" data-background-image="images/drush_fd.png" data-background-transition="slide">
+        </section>
+
+        <section>
+          <h2>Features VS Config & Co</h2>
+          <ul>
+            <li>Même socle de base : Configuration Update Manager. Et des mainteneurs communs.</li>
+            <li>UI pour Features : génération profil en "un clic"</li>
+            <li>Features : attention aux règles d'ajout automatique aux packages</li>
+            <li>Consistance Configuration API</li>
+            <li>Une feature = Un module généré par Config Devel (ajout fichier <i>nom_module.features.yml</i>)</li>
+            <li>Maintenance sur le long terme : Features is Features !</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Un Workflow possible</h2>
+          <ul>
+            <li>Création de package avec Config devel : contrôle fin des configurations ajoutées (liste clair des configurations)</li>
+            <li>Modfication du module en Features : (ajout fichier <i>nom_module.features.yml</i>)</li>
+            <ul>
+              <li>Pour les commandes drush de Features (drush fd, drush fim)</li>
+              <li>Et celles de Config devel (drush cd-em)</li>
+            </ul>
+            <li>Gestion des imports (revert) avec Features : drush fim</li>
+            <li>Gestion des exports avec Config devel (drush cd-em) ou Features (drush fex)</li>
+            <li>Attention à l'UI de Features qui peut "surcharger" automatiquement des packages</i></li>
+          </ul>
+        </section>
+
+        <section data-transition="linear" data-background-image="images/uas_demo.gif" data-background-transition="slide">
+        </section>
+
+        <section data-transition="linear" data-background="#4D6E7E" data-background-transition="slide">
+          <h2>Merci</h2>
+          <h3>Des questions ?</h3>
+        </section>
+
+
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.pack.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

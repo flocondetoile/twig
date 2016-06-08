@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Les profils d'installation</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+    <link rel="stylesheet" href="css/custom.css">
+
+		<!-- For syntax highlighting -->
+		<!--<link rel="stylesheet" href="lib/css/zenburn.css">-->
+    <link rel="stylesheet" href="plugin/highlight/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+          <h3>Le theming avec Drupal 8</h3>
+          <h2>A la découverte de</h2>
+					<h1>Twig</h1>
+				</section>
+
+				<!--<section data-transition="cube">-->
+					<!--<h2>Présentation</h2>-->
+          <!--<p>Fabrice Scoyer</p>-->
+          <!--<p>Freelance Drupal - <span class="blue">Flocon de toile</span> <br/>-->
+            <!--<img style="vertical-align: middle;" class="brut" width="150px" src="images/logo_flocon.png" alt="Logo Flocon de toile">-->
+          <!--</p>-->
+				<!--</section>-->
+
+        <section class="center">
+          <!--<img style="vertical-align: middle; max-height: 200px;" class="brut center" src="images/twig-logo.png" alt="Twig logo">-->
+          <h2 class="center">Twig</h2>
+          <ul>
+            <li>Nouveau moteur de template de Drupal 8</li>
+            <li>Projet indépendant, utilisé par ailleurs</li>
+            <li>Documentation : <a href="http://twig.sensiolabs.org/documentation">http://twig.sensiolabs.org/documentation</a></li>
+          </ul>
+        </section>
+
+        <section class="center">
+          <h2 class="center">Twig et le theming</h2>
+          <ul>
+            <li>Contrôle total du balisage de vos pages et éléments</li>
+            <li>Réalisation d'agencements / variations complexes difficilement réalisable depuis l'interface d'administration</li>
+            <li>Tout le theming au même endroit</li>
+            <li>Dissocier le front du back facilement</li>
+          </ul>
+        </section>
+
+        <!--Comparaison PHPTemplate.-->
+        <section>
+          <section class="center">
+            <h2 class="center">Twig VS PHPTemplate</h2>
+            <ul>
+              <li>Syntaxe propre plus concise pour manipuler/parcourir des variables</li>
+              <li>Twig est sécurisé par défaut sur Drupal 8 (auto échappement)</li>
+              <li>Twig est extensible : filtres, fonctions</li>
+              <li>Héritage / inclusion de templates permettant de limiter la duplication de code</li>
+            </ul>
+          </section>
+          <section class="center" data-background-image="images/phptemplate.png" data-background-transition="slide">
+            <h2 class="center">Template TWIG</h2>
+            <img style="vertical-align: middle; max-height: 500px; border: 5px solid #fff; box-shadow: 0 0 40px #fff; border-radius: 5px;" class="brut center" src="images/twig.png" alt="Twig vs phptemplate">
+          </section>
+        </section>
+
+        <!--Le debug.-->
+        <section>
+          <section class="center">
+            <h2 class="center">Débuter avec Twig</h2>
+            <ul>
+              <li>Activer le debug de Twig : services.yml</li>
+              <li>Le debug natif: dump(var)</li>
+              <li>Un peu mieux avec Kint (module devel) : kint(var)</li>
+              <li>Ou encore xdebug avec <a hef="https://www.drupal.org/project/twig_xdebug">Twig xdebug</a> : breakpoint()</li>
+            </ul>
+          </section>
+          <section class="center">
+            <h2 class="center">Activer le debug de Twig : services.yml</h2>
+            <pre>
+              <code class="yaml">
+  parameters:
+    twig.config:
+      debug: true
+      auto_reload: true
+      cache: false
+              </code>
+            </pre>
+            <img style="vertical-align: middle; max-width: 100%;" class="brut center" src="images/debug_actif.png" alt="debug twig actif">
+            <p>Une extension chrome : <a href="https://github.com/arshad/drupal-template-helper?utm_content=buffer30f2f&utm_medium=social&utm_source=twitter.com&utm_campaign=buffer">Drupal template Helper</a></p>
+          </section>
+          <section class="center">
+            <h2 class="center">{{ dump(content) }} </h2>
+            <p>Un peu brut...peut mieux faire</p>
+            <img style="vertical-align: middle; max-width: 100%;" class="brut center" src="images/dump.png" alt="debug avec dump()">
+          </section>
+          <section class="center">
+            <h2 class="center">{{ kint(content) }}</h2>
+            <p>Mieux mais très looooooonnnnnng</p>
+            <img style="vertical-align: middle; max-height: 100%;" class="brut center" src="images/kint.png" alt="debug avec kint()">
+          </section>
+          <section class="center">
+            <h2 class="center">{{ breakpoints() }} : top !</h2>
+            <img style="vertical-align: middle; max-width: 100%;" class="brut center" src="images/twig_xdebug.png" alt="debug avec xdebug()">
+          </section>
+        </section>
+
+        <!--Les templates.-->
+        <section>
+          <section class="center" data-background-image="images/tissu_couleur.jpg" data-background-transition="slide">
+            <h2 class="center">Les templates</h2>
+          </section>
+
+          <section class="center" data-background-image="images/templates.png" data-background-transition="slide">
+            <h2 class="center">Les surcharges de templates</h2>
+            <pre><code>
+              <h3 class="center">Découvertes automatiquement dans le dossier templates du thème</h3>
+              <h3 class="center">Copier le template ou sa variation dans son thème</h3>
+            </code></pre>
+          </section>
+
+          <section class="center">
+            <h2 class="center">Fournir des surcharges de templates</h2>
+            <p class="center">hook_theme_suggestions_HOOK_alter()</p>
+            <pre>
+              <code class="php">
+  function MODULE_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+    if ($node = \Drupal::routeMatch()->getParameter('node')) {
+      $suggestions[] = 'page__flocon__' . $node->getType();
+      $suggestions[] = 'page__flocon__node_' . $node->id();
+    }
+  }
+              </code>
+            </pre>
+            <img style="vertical-align: middle; max-width: 100%;" class="brut center" src="images/suggestions.png" alt="suggestions de template">
+          </section>
+
+          <section class="center">
+            <h2 class="center">Fournir son propre template</h2>
+            <pre>
+              <code class="php">
+  /**
+   * Implements hook_theme().
+   */
+  function MODULE_theme($existing, $type, $theme, $path) {
+    return [
+      'social_simple_buttons' => [
+        'variables' => array(
+          'var1' => [],
+          'var2' => [],
+      ]
+    ];
+  }
+              </code>
+            </pre>
+             <pre>
+              <code class="twig">
+  {# file social-simple-buttons.html.twig #}
+  {% if var1 or var2 -%}
+    &lt;div class"social-buttons"&gt;{{ var1 }} {{ var2 }&lt;/div&gt;
+  {%- endif %}
+              </code>
+            </pre>
+          </section>
+
+          <section class="center">
+            <h2 class="center">Utiliser son propre template</h2>
+            <pre>
+              <code class="php">
+  $build['brocoli'] = [
+    '#theme' => 'social_simple_buttons',
+    '#var1' => $var1,
+    '#var2' => $var2,
+  ];
+              </code>
+            </pre>
+          </section>
+
+          <section class="center">
+            <h2 class="center">Utiliser les templates du coeur</h2>
+            <p class="center">exemple avec links.html.twig <em>(voir <a href="https://api.drupal.org/api/drupal/core%21includes%21theme.inc/function/drupal_common_theme/8.2.x">drupal_common_theme()</a>)</em></p>
+            <pre>
+              <code class="php">
+  /**
+   * Implements hook_theme().
+   */
+  function MODULE_theme($existing, $type, $theme, $path) {
+    return [
+      'social_simple_buttons' => [
+        'variables' => array('links' => array(), 'attributes' => array('class' => array('links')), 'heading' => array(), 'set_active_class' => FALSE),
+        'preprocess functions' => array('template_preprocess_links'),
+      ],
+    ];
+  }
+              </code>
+            </pre>
+
+            <pre>
+              <code class="twig">
+  {# file social-simple-buttons.html.twig #}
+              </code>
+            </pre>
+          </section>
+
+          <section class="center">
+            <h2 class="center">Utiliser les templates du coeur</h2>
+            <p class="center">avec la surcharge automatique</p>
+            <pre>
+              <code class="php">
+  /**
+   * Implements hook_theme().
+   */
+  function MODULE_theme($existing, $type, $theme, $path) {
+    return [
+      'links__social_simple_buttons' => [
+        'base hook' => 'links',
+      ],
+    ];
+  }
+              </code>
+            </pre>
+            <pre>
+              <code class="twig">
+  {# file links--social-simple-buttons.html.twig #}
+  {# dans le dossier templates du module ou du thème #}
+              </code>
+            </pre>
+
+          </section>
+
+          <section class="center">
+            <h2 class="center">Utiliser les templates du coeur</h2>
+            <p class="center">ou directement en construisant le render array</p>
+            <pre>
+              <code class="php">
+  $build['social_simple_buttons'] = [
+    '#theme' => 'links__social_simple_buttons',
+    '#links' => $links,
+    '#attributes' => array(
+      'class' => array('links', 'inline', 'social-buttons-links')
+    ),
+    '#heading' => array(
+      'text' => t('Share on '),
+      'level' => 'div',
+      'attributes' => array(
+        'class' => array('social-buttons-title'),
+      ),
+    ),
+  ];
+              </code>
+            </pre>
+
+            <pre>
+              <code class="twig">
+  {# file links--social-simple-buttons.html.twig #}
+  {# dans le dossier templates du thème uniquement #}
+              </code>
+            </pre>
+
+          </section>
+
+
+
+        </section>
+
+
+
+        <section>
+          <section class="center" data-background-image="images/pecheur.jpg" data-background-transition="slide">
+            <h2 class="center">Twig et la sécurité</h2>
+          </section>
+
+          <section class="center">
+            <h2 class="center">La désinfection des variables est activée automatiquement par Drupal 8</h2>
+            <pre>
+              <code class="twig">
+  {# Twig sans Drupal 8 : utilisation du filtre e #}
+  {{ title|e }}
+
+  {# Twig avec Drupal 8 : le filtre escape est appliqué automatiquement #}
+  {{ title }}
+              </code>
+            </pre>
+          </section>
+
+          <section class="center">
+            <h2 class="center">Afficher ses variables dans Twig</h2>
+            <p class="center"><a href="https://www.drupal.org/node/2296163">Twig autoescape enabled and text sanitization APIs updated</a></p>
+            <ul>
+              <li>Utiliser un template twig intermédiaire à façon (hook_theme)</li>
+              <li>Render array : <strong>#markup</strong> pour du texte avec html (par défaut Xss::filterAdmin())</li>
+              <li>Render array : <strong>#plain_text</strong> pour du texte brut (~check_plain)</li>
+              <li>Render array : <strong>#item_list</strong> pour des listes</li>
+              <li>Render array : <strong>#inline_template</strong> pour des mini templates twig</li>
+              <li>Retourner des objets <strong>FormattableMarkup</strong> ou <strong>TranslatableMarkup</strong></li>
+            </ul>
+            <pre>
+              <code class="php">
+  return ['#plain_text' => $var_safe_or_unsafe ]
+  return new TranslatableMarkup($string, $args, $options);
+              </code>
+            </pre>
+
+          </section>
+
+          <section class="center">
+            <h2 class="center">Avertissement</h2>
+            <p class="center">Twig est sécurisé</p>
+            <h2 class="center">PAR DEFAUT</h2>
+            <p>Ce n'est donc pas une vérité absolue.</p>
+            <p>Avec un peu de bonne volonté on peut très bien en faire un portail d'entrée pour les injections SQL, XSS ou autres joyeusetés</p>
+          </section>
+
+        </section>
+
+
+        <section>
+          <section class="center" data-background-image="images/brume.jpg" data-background-transition="slide">
+            <h2 class="center">Extension des templates</h2>
+          </section>
+
+          <section class="center">
+            <h2 class="center">Etendre un template</h2>
+            <p>Le template de base très très long</p>
+            <pre>
+              <code class="twig">
+  {# @file page.html.twig #}
+  {% block main %}
+    &lt;div role="main" class="main-container {{ container }} js-quickedit-main-content"&gt;
+    ....
+      {# Sidebar Second #}
+      {% if page.sidebar_second %}
+      {% block sidebar_second %}
+      &lt;aside class="col-xs-12 col-sm-4 col-md-3 sidebar sidebar-secondary""&gt;
+        {{ page.sidebar_second }}
+      &lt;/aside&gt;
+      {% endblock %}
+      {% endif %}
+    ...
+    &lt;/div&gt;
+  {% endblock %}
+              </code>
+            </pre>
+          </section>
+
+          <section class="center">
+            <h2 class="center">Etendre un template</h2>
+            <p>La variation qui ne surcharge que le strict nécessaire</p>
+            <pre>
+              <code class="twig">
+  {# File page--contact.html.twig #}
+  {% extends "page.html.twig" %}
+  {% block section %}
+    {% set content_classes = [page.sidebar_first or page.sidebar_second ? 'col-xs-12 col-sm-7 col-md-7',] %}
+    &lt;section{{ content_attributes.addClass(content_classes) }}&gt;
+  {% endblock %}
+
+  {# Sidebar Second #}
+  {% block sidebar_second %}
+    &lt;aside class="col-xs-12 col-sm-5 col-md-5 sidebar sidebar-secondary" role="complementary"&gt;
+      {{ page.sidebar_second }}
+    &lt;/aside&gt;
+  {% endblock %}
+              </code>
+            </pre>
+            <p>Pas de duplication de code, <br />et on visualise immédiatement la nature de cette variation</p>
+          </section>
+
+          <section class="center">
+            <h2 class="center">Inclure un template</h2>
+            <pre>
+              <code class="twig">
+  {# @file page.html.twig #}
+  {% include 'header.html' %}
+  {% block main %}
+    &lt;div role="main" class="main-container {{ container }} js-quickedit-main-content"&gt;
+    ...
+    &lt;/div&gt;
+  {% endblock %}
+  {% include 'footer.html' %}
+              </code>
+            </pre>
+            <p>Décomposer des templates conséquents en plus petits éléments<br />Améliorer la lisibilité et la maintenabilité</p>
+          </section>
+
+        </section>
+
+
+
+
+
+        <section>
+          <section class="center">
+            <h2 class="center">La manipulation des variables : filtres et fonctions</h2>
+            <ul>
+              <li>Les filtres et fonctions fournis par <a href="http://twig.sensiolabs.org/doc/filters/index.html">Twig lui-même</a></li>
+              <li>Les <a href="https://www.drupal.org/node/2357633">filtres</a> et <a href="https://www.drupal.org/node/2486991">fonctions</a> spécifiques à Drupal 8</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 class="center">Les filtres Twig Drupal 8 (1/2)</h2>
+            <p>t : traduire une chaine de caractère dans la langue courante</p>
+            <pre><code>{{ 'Home'|t }}</code></pre>
+
+            <p>{% trans %} ... {% endtrans %} : pour une chaine avec arguments</p>
+            <pre><code>{% trans %}By {{ author_name }}{% endtrans %}</code></pre>
+
+            <p>safe_join : pour concaténer un tableau en liste avec séparateur</p>
+            <pre><code>{{ items|safe_join(', ') }}</code></pre>
+
+            <p>without : pour enlever un (ou plus) élément d'un tableau</p>
+            <pre><code>{{ content|without('field_tags', 'links') }}</code></pre>
+
+          </section>
+
+          <section>
+            <h2 class="center">Les filtres Twig Drupal 8 (2/2)</h2>
+            <p>clean_class : formater une chaine en une classe HTML valide</p>
+            <pre><code>{% set classe = view_mode ? 'node--view-mode-' ~ view_mode|clean_class %}</code></pre>
+
+            <p>clean_id : formater une chaine en identifiant HTML valide</p>
+            <pre><code>&lt;div id="{{ custom_var|clean_id }}"&gt;</code></pre>
+
+            <p>format_date : formater une date</p>
+            <pre><code>{{ node.createdtime | format_date('publication_date') }}</code></pre>
+
+          </section>
+
+          <section>
+            <h2 class="center">Les fonctions Twig Drupal 8</h2>
+            <p>url : génère une url absolue depuis une route</p>
+            <pre><code>{{ url('view.news.page_news') }}</code></pre>
+
+            <p>path : génère une url relative depuis une route et un argument</p>
+            <pre><code>{{ path('entity.node.canonical', {'node': node.id}) }}</code></pre>
+
+            <p>link : génère un lien</p>
+            <pre><code>{{ link(item.title, item.url, { 'class':['btn', 'btn-primary'] }) }}</code></pre>
+
+            <p>file_url : génère une url vers un fichier</p>
+            <pre><code>{{ file_url(node.field_image.entity.uri.value) }}</code></pre>
+
+            <p>attach_library : attache une librairie au rendu</p>
+            <pre><code>{{ attach_library('module/flexslider') }}</code></pre>
+          </section>
+
+          <section>
+            <h2 class="center">Depuis les modules contribués <br /> <a href="https://www.drupal.org/project/twig_tweak">Twig tweak</a></h2>
+            <p>drupal_view : embarquer une vue</p>
+            <pre><code>{{ drupal_view('view_name', 'display_name') }}</code></pre>
+
+            <p>drupal_block : embarquer un bloc</p>
+            <pre><code>{{ drupal_block('news_featured') }}</code></pre>
+
+            <p>drupal_entity : embarquer une entité</p>
+            <pre><code>{{ drupal_entity('node', '3', 'teaser') }}</code></pre>
+
+            <p>drupal_token : utiliser les tokens pour récupérer des valeurs</p>
+            <pre><code>{{ drupal_token('site:name') }}</code></pre>
+
+            <p>drupal_config : accéder à la configuration</p>
+            <pre><code>{{ drupal_config('system.site', 'name') }}</code></pre>
+
+          </section>
+
+          <section>
+            <h2 class="center">Un mot sur les Attributs</a></h2>
+            <pre><code>
+  function MODULE_preprocess_node(&$variables) {
+    $attributes = new Attribute(['class' => 'btn']);
+    $attributes->addClass('btn-default');
+    $variables['var_attributes'] = $attributes;
+  }
+          </code></pre>
+            <pre><code>&lt;article{{ var_attributes.addClass(classes) }}&gt;</code></pre>
+            <pre><code>{{ var_attributes.removeClass('btn-default') }}</code></pre>
+            <pre><code>{{ var_attributes.setAttribute('id', 'my-id') }}</code></pre>
+            <pre><code>{{ var_attributes.removeAttribute('id') }}</code></pre>
+            <pre><code>{% if var_attributes.hasClass('btn-default') %}</code></pre>
+            <pre><code>&lt;div class"my-class {{ var_attributes.class }}" {{ attributes|without('class') }}&gt;</code></pre>
+
+
+          </section>
+
+        </section>
+
+
+        <section>
+
+          <section class="center">
+            <h2 class="center">Travailler avec Twig</h2>
+            <h3 class="center">ou avec les fonctions de preprocess ?</h3>
+          </section>
+
+          <section class="center">
+            <h2 class="center">Fournir ses propres variables</h2>
+            <p>depuis les fonctions de preprocess</p>
+            <pre><code>
+  function MODULE_preprocess_node(&$variables) {
+    $node = $variables['node'];
+    $variables['var1'] = $node->label();
+    $variables['var2'] = $var2;
+    $variables['var_attributes'] = new Attribute();
+  }
+          </code></pre>
+                    <pre><code>
+  {# @file node.html.twig #}
+  &lt;div {{var_attributes.addClass('my-class') }}&gt; {{ var1 }} - {{ var2 }}&lt;/div&gt;
+            </code></pre>
+          </section>
+
+          <section class="center">
+            <h2 class="center">Construire un lien</h2>
+            <p>depuis les fonctions de preprocess</p>
+            <pre><code>
+  function MODULE_preprocess_paragraph__paragraph_slide(&$variables) {
+    $variables['link'] = [];
+    $variables['url'] = '';
+    $paragraph = $variables['elements']['#paragraph'];
+    $uri = $paragraph->field_paragraph_slide_link->uri;
+    $title = $paragraph->field_paragraph_slide_link->title;
+    $options = $paragraph->field_paragraph_slide_link->options;
+    $options['attributes']['class'][] = 'btn';
+    $options['attributes']['class'][] = 'btn-primary';
+
+
+    if ($title && $uri) {
+      $url = Url::fromUri($uri, $options);
+      $variables['link'] = Link::fromTextAndUrl($title, $url);
+    }
+
+    if ($uri) {
+      $variables['url'] = Url::fromUri($uri, $options)->toString();
+    }
+
+    $position = new Attribute();
+    $class = Html::cleanCssIdentifier($paragraph->field_paragraph_slide_position->value);
+    if (empty($class)) {
+      $class = 'center';
+    }
+    $position->addClass($class);
+    $variables['position'] = $position;
+
+  }
+            </code></pre>
+          </section>
+
+          <section class="center">
+            <h2 class="center">Construire un lien</h2>
+            <p>depuis le template</p>
+            <pre><code>
+  {% set link_url = content.field_paragraph_slide_link.0['#url'] %}
+  {% set link_title = content.field_paragraph_slide_link.0['#title'] %}
+  {# ou une alternative en passant par l'objet et non le render array)
+  {% set link_url = paragraph.field_paragraph_slide_link.0.url %}
+  {% set link_title = paragraph.field_paragraph_slide_link.0.title %}
+
+  {% if link_url and link_title %}
+    &lt;div class="slide-link"&gt;
+      &lt;a href="{{ link_url }}" class="btn btn-primary">{{ link_title }}&lt;/a&gt;
+      {# une autre alternative #}
+      {{ link(link_title, link_url, { 'class':['btn', 'btn-primary']} ) }}
+    &lt;/div&gt;
+  {% endif %}
+            </code></pre>
+          </section>
+
+          <section>
+            <h1>Privilégier Twig</h1>
+            <p>Pour des ajouts relatifs au theming</p>
+            <ul>
+              <li>Gains en performance</li>
+              <li>Maintenance facilitée</li>
+            </ul>
+            <blockquote>La simplicité est la sophistication suprême</blockquote>
+          </section>
+
+        </section>
+
+
+
+        <section>
+          <section class="center">
+            <h2 class="center">Créer ses propres filtres / fonctions</h2>
+            <p>Création d'un service</p>
+            <pre><code class="yaml">
+  # file monmodule.services.yml
+  services:
+    monmodule.twig_extension:
+      class: Drupal\monmodule\TwigExtension
+      arguments: ['@entity_type.manager', '@token', '@config.factory', '@current_route_match']
+      tags:
+        - { name: twig.extension }
+            </code></pre>
+          </section>
+
+          <section class="center">
+            <h2 class="center">Créer ses propres filtres / fonctions</h2>
+            <p>Implémentation de Twig_Extension</p>
+            <pre><code class="php">
+  /**
+   * Twig extension with some useful functions and filters.
+   */
+  class TwigExtension extends \Twig_Extension {
+    public function getFunctions() {
+      return [new \Twig_SimpleFunction('my_func', [$this, 'myFunc'])];
+    }
+    public function getFilters() {
+      return [new \Twig_SimpleFilter('uc_words', [$this, 'ucWords'])];
+    }
+    public function myFunc($arg1, $arg2, $arg3) {
+      return some_complex_stuf(...);
+    }
+    public function ucWords($text) {
+      return ucwords($text);
+    }
+  }
+            </code></pre>
+          </section>
+
+          <section class="center">
+            <h2 class="center">Créer ses propres filtres / fonctions</h2>
+            <p><a href="https://www.drupal.org/project/twig_extender">Twig extender</a> permet de créer ses extensions Twig depuis le système de plugin de Drupal 8</p>
+            <pre><code>
+  /**
+   * Example plugin Hello World.
+   *
+   * @TwigPlugin(
+   *   id = "twig_extender_hello",
+   *   label = @Translation("Hello world plugin"),
+   *   type = "function",
+   *   name = "hello",
+   *   function = "hello"
+   * )
+   */
+            </code></pre>
+          </section>
+        </section>
+
+        <section>
+          <section class="center" data-background-image="images/vieil_homme.jpg" data-background-transition="slide">
+            <h2 class="center">Les bonnes pratiques</h2>
+          </section>
+
+          <section class="center">
+            <h2 class="center">Les bonnes pratiques</h2>
+            <ul>
+              <li>Toujours envoyer aux templates des <em>render array</em></li>
+              <li>Héritage et inclusion : vous pouvez en abuser</li>
+              <li>On peut manipuler les variables autrement que dans les fonctions de preprocess : depuis le template</li>
+              <li>Les classes dans les templates. Pas dans les preprocess</li>
+              <ul>
+                <li>Tout au même endroit</li>
+                <li>Permettre un contrôle total du rendu par une simple surcharge de template</li>
+              </ul>
+            </ul>
+          </section>
+
+          <section class="center">
+            <h2 class="center">Les bonnes pratiques</h2>
+            <ul>
+              <li>Twig est sécurisé PAR DEFAUT, mais on peut si on le veut vraiment en faire une passoire
+                <ul>
+                  <li>SVP, plus de PHP dedans !</li>
+                  <li>N'utilisez pas le filtre raw</li>
+                </ul>
+              </li>
+              <li>La documentation (variables disponibles, fonction de preprocess)</li>
+            </ul>
+          </section>
+
+        </section>
+
+
+        <section data-transition="linear" data-background="#4D6E7E" data-background-transition="slide">
+          <h2>Merci</h2>
+          <h3>Des questions ?</h3>
+        </section>
+
+
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.pack.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
